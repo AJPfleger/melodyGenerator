@@ -11,9 +11,6 @@ from scipy.io import wavfile
 import intervalls
 iv = intervalls.intervalls
 
-concertPitch = 440 # a^1
-fs = 44100 # sample rate
-bpm = 50
 
 # notevalue compared to bpm. Every beat is of length 1
 def createTone(notevalue, pitch, bpm,fs=44100):
@@ -23,18 +20,23 @@ def createTone(notevalue, pitch, bpm,fs=44100):
 
 # notevalue compared to bpm. Every beat is of length 1
 def createToneOvertones(notevalue, pitch, bpm,fs=44100):
+
     duration = notevalue * 60 / bpm
-    t = np.linspace(0, duration, int(fs * duration))
-    
-    tone = np.sin(pitch * 2 * np.pi * t)
-    weight = 1/5
-    ot = 0
-    while pitch < fs/2:
-        ot += 1
-        pitch *= 2
-        tone += np.sin(pitch * 2 * np.pi * t) * weight**ot
-    
-    return tone/max(tone)
+    samples =  int(fs * duration)
+    tone = np.zeros(samples)
+
+    # we only calculate overtones if there is a pitch (= no pause)
+    if pitch != 0:
+        t = np.linspace(0, duration, int(fs * duration))
+        weight = 1/5
+        ot = 0
+        while pitch < fs/2:
+            tone += np.sin(pitch * 2 * np.pi * t) * weight**ot
+            ot += 1
+            pitch *= 2
+        tone /= max(tone)
+
+    return tone
 
 # to cut the wave, close to a zerocrossing
 def shortenToZeroCrossing(note):
@@ -58,18 +60,15 @@ def fadeOut(note, t=0.9):
     return note * weight
 
 
-#from melodyOdeToJoy import *
-from melodyArpeggio import *
+fs = 44100 # sample rate
+
+from melodyOdeToJoy import *
+#from melodyArpeggio import *
 
 y = createTone(0, 1, bpm, fs)
 for n in range(len(melody)):
     currentNote = melody[n]
-    if currentNote[1] != 0:
-        note = createToneOvertones(currentNote[0], currentNote[1]*basenote, bpm, fs)
-    else:
-        note = createTone(currentNote[0], currentNote[1]*basenote, bpm, fs)
-    
+    note = createToneOvertones(currentNote[0], currentNote[1]*basenote, bpm, fs)
     y = np.append(y,fadeOut(note))
-
 
 wavfile.write('melody.wav', fs, y)
