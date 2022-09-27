@@ -1,7 +1,7 @@
 import intervalls
 iv = intervalls.intervalls
 
-bpm = 120
+bpm = 70
 basenote = 440/iv.M6
 melody = [
     (1,iv.P1),

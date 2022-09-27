@@ -56,31 +56,12 @@ def fadeOut(note, t=0.9):
     weight = np.append(weight,np.linspace(1,0,rest))
     
     return note * weight
-    
 
 
-basenote = concertPitch/iv.M6
-melody = [
-    (1,iv.P1),
-    (1,iv.M3),
-    (1,iv.P5),
-    (1/2,iv.O8),
-    (1/2,iv.pause),
-    (1/2,iv.O8),
-    (1/2,iv.pause),
-    (1/2,iv.O8),
-    (1/2,iv.pause),
-    (1/2,iv.O8),
-    (1/2,iv.pause),
-    (1,iv.P5),
-    (1,iv.M3),
-    (1.5,iv.P1),
-    ]
+#from melodyOdeToJoy import *
+from melodyArpeggio import *
+
 y = createTone(0, 1, bpm, fs)
-
-from melodyOdeToJoy import *
-
-
 for n in range(len(melody)):
     currentNote = melody[n]
     if currentNote[1] != 0:
