@@ -1,5 +1,8 @@
+import intervalls
+iv = intervalls.intervalls
+
 bpm = 120
-basenote = concertPitch/iv.M6
+basenote = 440/iv.M6
 melody = [
     (1,iv.M3), # bar 1
     (1,iv.M3),

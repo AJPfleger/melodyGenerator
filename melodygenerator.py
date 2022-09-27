@@ -8,29 +8,12 @@ Created on Tue Sep 27 20:13:17 2022
 
 import numpy as np
 from scipy.io import wavfile
-
- 
-
+import intervalls
+iv = intervalls.intervalls
 
 concertPitch = 440 # a^1
 fs = 44100 # sample rate
 bpm = 50
-
-class intervalls:
-    P1 = 1 # Perfect unison
-    m2 = 2**(1/12) # Minor second
-    M2 = 2**(2/12) # Major second
-    m3 = 2**(3/12) # Minor third
-    M3 = 2**(4/12) # Major third
-    P4 = 2**(5/12) # Perfect fourth
-    T5 = 2**(6/12) # Tritone
-    P5 = 2**(7/12) # Perfect fifth
-    m6 = 2**(8/12) # Minor sixth
-    M6 = 2**(9/12) # Major sixth
-    m7 = 2**(10/12) # Minor seventh
-    M7 = 2**(11/12) # Major seventh
-    O8 = 2 # Perfect octave
-    pause = 0
 
 # notevalue compared to bpm. Every beat is of length 1
 def createTone(notevalue, pitch, bpm,fs=44100):
@@ -75,7 +58,6 @@ def fadeOut(note, t=0.9):
     return note * weight
     
 
-iv = intervalls
 
 basenote = concertPitch/iv.M6
 melody = [
@@ -95,6 +77,9 @@ melody = [
     (1.5,iv.P1),
     ]
 y = createTone(0, 1, bpm, fs)
+
+from melodyOdeToJoy import *
+
 
 for n in range(len(melody)):
     currentNote = melody[n]
