@@ -12,4 +12,4 @@ class intervalls:
     m7 = 2**(10/12) # Minor seventh
     M7 = 2**(11/12) # Major seventh
     O8 = 2 # Perfect octave
-    pause = 0
+    pause = float("nan")
