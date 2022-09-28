@@ -15,7 +15,7 @@ To train your pitch you need to:
 5. (Optional) You can use an app like [Nail the pitch](https://play.google.com/store/apps/details?id=com.autumnrockdev.nailthepitch) to check if you are hitting the notes correctly. (Please someone check if this app is safe to use.)
 
 ## Future Goals
-* Make it full comand line compatible
+* Make it full command line compatible
 * Make the frequency-selection more intuitiv, e.g. by entering the name of the tone
 * Generate better sounds for the generated instruments
 * Write more melodies
