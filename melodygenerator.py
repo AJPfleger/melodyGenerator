@@ -102,7 +102,12 @@ def generateWaveForm(melody,basenote=440,bpm=60,sound='sine',fs=44100):
 
     return wf
 
-def pushMelodyThroughScales(melody, fLow, fCenter, fHigh, bpm, sound='piano', fs=44100):
+def pushMelodyThroughScales(melody, fLow, fCenter, fHigh, bpm, sound='sine', fs=44100):
+
+    assert fLow < fHigh, "fLow must be smaller than fHigh"
+    assert fCenter > fLow, "fCenter must be larger than fLow"
+    assert fCenter < fHigh, "fCenter must be smaller than fHigh"
+
     waveComplete = np.zeros(1)
 
     # go up
