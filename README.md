@@ -12,7 +12,7 @@ To train your pitch you need to:
   * `fHigh` is the highest frequency you are able to sing
 3. Generate the .wav-file, with all possible transpositions of the melody within your vocal range
 4. Play the .wav-file, pause after each snippet and try to sing it.
-5. (Optional) You can use an app like (Nail the pitch)[https://play.google.com/store/apps/details?id=com.autumnrockdev.nailthepitch] to check if you are hitting the notes correctly. (Please someone check if this app is safe to use.)
+5. (Optional) You can use an app like [Nail the pitch](https://play.google.com/store/apps/details?id=com.autumnrockdev.nailthepitch) to check if you are hitting the notes correctly. (Please someone check if this app is safe to use.)
 
 ## Future Goals
 * Make it full comand line compatible
