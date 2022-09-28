@@ -8,8 +8,8 @@ Created on Tue Sep 27 20:13:17 2022
 
 import numpy as np
 from scipy.io import wavfile
-import intervalls
-iv = intervalls.intervalls
+#import intervalls
+#iv = intervalls.intervalls
 
 
 # notevalue compared to bpm. Every beat is of length 1
@@ -59,16 +59,24 @@ def fadeOut(note, t=0.9):
     
     return note * weight
 
+def generateWaveForm(melody,basenote=440,bpm=60,fs=44100):
+    wf = createTone(0, 1, bpm, fs)
+    for n in range(len(melody)):
+        currentNote = melody[n]
+        note = createToneOvertones(currentNote[0], currentNote[1]*basenote, bpm, fs)
+        wf = np.append(wf,fadeOut(note))
+
+    return wf
+
+
 
 fs = 44100 # sample rate
 
-from melodyOdeToJoy import *
-#from melodyArpeggio import *
+#from melody.melodyOdeToJoy import *
+from melody.melodyArpeggio import *
+#from melody.melodyAlternate import *
 
-y = createTone(0, 1, bpm, fs)
-for n in range(len(melody)):
-    currentNote = melody[n]
-    note = createToneOvertones(currentNote[0], currentNote[1]*basenote, bpm, fs)
-    y = np.append(y,fadeOut(note))
 
-wavfile.write('melody.wav', fs, y)
+wave = generateWaveForm(melody,basenote,bpm,fs)
+
+wavfile.write('melody.wav', fs, wave)
