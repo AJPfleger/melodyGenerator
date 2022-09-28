@@ -19,25 +19,33 @@ def createTone(notevalue, pitch, bpm,fs=44100):
     return np.sin(pitch * 2 * np.pi * t)
 
 # notevalue compared to bpm. Every beat is of length 1
-def createToneOvertones(notevalue, pitch, bpm, sound='piano', fs=44100):
+def createToneOvertones(notevalue, pitch, bpm, sound='sine', fs=44100):
+
+    assert 20 < bpm and bpm < 400, "bpm out of bounds. It should be between 20 and 400."
+    assert pitch < fs/2 or np.isnan(pitch), "pitch > fs/2: tone can not be generated with this sampling frequence."
 
     duration = notevalue * 60 / bpm
     samples =  int(fs * duration)
     tone = np.zeros(samples)
 
     # we only calculate overtones if there is a pitch (= no pause)
-    if pitch != 0:
+    if pitch > 0:
         t = np.linspace(0, duration, int(fs * duration))
 
-        if sound == 'test':
-            weight = 1/5
-            ot = 0
-            while pitch < fs/2:
-                tone += np.sin(pitch * 2 * np.pi * t) * weight**ot
-                ot += 1
-                pitch *= 2
-            tone /= max(tone)
-            return tone
+        # synthetic sounds
+        if sound == 'oct2':
+            otfreq = np.arange(1,21)
+            weight = 1/2**otfreq
+        elif sound == 'oct3':
+            otfreq = np.arange(1,21)
+            weight = 1/3**otfreq
+        elif sound == 'oct4':
+            otfreq = np.arange(1,21)
+            weight = 1/4**otfreq
+        elif sound == 'square':
+            otfreq = np.arange(1,41,2)
+            weight = 1/otfreq
+        # real instruments
         elif sound == 'piano':
             #weight = [0.98, 1, 0.68, 0.58, 0.2, 0.2, 0.08]
             #otfreq = [1, 2, 3, 4, 5, 6, 7]
@@ -49,10 +57,14 @@ def createToneOvertones(notevalue, pitch, bpm, sound='piano', fs=44100):
         elif sound == 'violin':
             weight = [1, 0.14, 0.12, 0.07]
             otfreq = [1, 2, 3, 4]
+        else: # sound == 'sine'
+            weight = [1]
+            otfreq = [1]
 
         for ot in range(len(otfreq)):
             otpitch = otfreq[ot] * pitch
-            if otpitch > fs/2: break
+            if otpitch > fs/2:
+                break
             tone += np.sin(otpitch * 2 * np.pi * t) * weight[ot]
 
         # normalize
@@ -81,7 +93,7 @@ def fadeOut(note, t=0.9):
     
     return note * weight
 
-def generateWaveForm(melody,basenote=440,bpm=60,sound='piano',fs=44100):
+def generateWaveForm(melody,basenote=440,bpm=60,sound='sine',fs=44100):
     wf = createTone(0, 1, bpm, fs)
     for n in range(len(melody)):
         currentNote = melody[n]
@@ -123,8 +135,8 @@ from melody.melodyArpeggio import *
 #wave = generateWaveForm(melody,basenote,bpm,'piano',fs)
 fLow = concertPitch * 2**(-12/12)
 fCenter = concertPitch * 2**(-7/12)
-fHigh = concertPitch * 2**(0/12)
-wave = pushMelodyThroughScales(melody, fLow, fCenter, fHigh, bpm*5, 'piano', fs)
+fHigh = concertPitch * 2**(7/12)
+wave = pushMelodyThroughScales(melody, fLow, fCenter, fHigh, bpm*5, 'oct2', fs)
 
 
 wavfile.write('melody.wav', fs, wave)
