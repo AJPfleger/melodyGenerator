@@ -113,10 +113,12 @@ def pushMelodyThroughScales(melody, fLow, fCenter, fHigh, bpm, sound='sine', fs=
     # go up
     n = 0
     base = fCenter
-    while base*np.max(melody,0)[1] < fHigh:
+    while base*np.nanmax(melody,0)[1] < fHigh:
         base = fCenter * 2**(n/12)
         waveStep = generateWaveForm(melody,base,bpm,sound,fs)
         waveComplete = np.append(waveComplete,waveStep)
+        waveComplete = np.append(waveComplete,waveStep*0)
+        waveComplete = np.append(waveComplete,waveStep*0)
         n += 1
         
     # go down
@@ -125,6 +127,8 @@ def pushMelodyThroughScales(melody, fLow, fCenter, fHigh, bpm, sound='sine', fs=
         base = fCenter * 2**(n/12)
         waveStep = generateWaveForm(melody,base,bpm,sound,fs)
         waveComplete = np.append(waveComplete,waveStep)
+        waveComplete = np.append(waveComplete,waveStep*0)
+        waveComplete = np.append(waveComplete,waveStep*0)
         n -= 1
 
     return waveComplete
@@ -136,12 +140,12 @@ concertPitch = 440 # a^1
 from melody.melodyArpeggio import *
 #from melody.melodyAlternate import *
 
-
 #wave = generateWaveForm(melody,basenote,bpm,'piano',fs)
-fLow = concertPitch * 2**(-12/12)
-fCenter = concertPitch * 2**(-7/12)
-fHigh = concertPitch * 2**(7/12)
-wave = pushMelodyThroughScales(melody, fLow, fCenter, fHigh, bpm*5, 'oct2', fs)
+fLow = concertPitch * 2**(-9/12)/4 # C2
+fCenter = concertPitch * 2**(-5/12)/2 # E3
+fHigh = concertPitch # * 2**(7/12) # A4 
+bpm = 80
+wave = pushMelodyThroughScales(melody, fLow, fCenter, fHigh, bpm, 'oct3', fs)
 
 
-wavfile.write('melody.wav', fs, wave)
+wavfile.write('melodyArpeggio.wav', fs, np.float32(wave))
